@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendation System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: aquamarine;
+        }
+
+        .movie-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.8); /* Added slight transparency to movie cards */
+        }
+
+        #movies {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.3) url('https://lajoyalink.com/wp-content/uploads/2018/03/Movie.jpg') no-repeat center/cover; 
+            background-size: cover;
+            background-position: center;
+            padding: 20px;
+        }
+
+        label, h1 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        select, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .title{
+            text-align: center;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-size: 32px;
+            font-style: oblique;
+            color: darkred;
+        }
+
+    </style>
+</head>
+<body>
+    <p class="title">Movie Recommendation System</p>
+
+    <label for="genre">Filter by Genre:</label>
+    <select id="genre">
+        <option value="">All</option>
+        <option value="Sci-Fi">Sci-Fi</option>
+        <option value="Action">Action</option>
+        <option value="Crime">Crime</option>
+        <option value="Drama">Drama</option>
+    </select>
+    <button id="get-recommendations">Get Recommendations</button>
+
+    <div id="movies"></div>
+
+    <script>
+        document.getElementById("get-recommendations").addEventListener("click", async function () {
+            const genre = document.getElementById("genre").value;
+            const apiUrl = genre ? `http://127.0.0.1:8000/api/recommendations/?genre=${genre}` : 'http://127.0.0.1:8000/api/recommendations/';
+
+            try {
+                const response = await fetch(apiUrl);
+                const movies = await response.json();
+                const moviesDiv = document.getElementById("movies");
+
+                moviesDiv.innerHTML = ""; // Clear previous results
+
+                if (movies.length > 0) {
+                    movies.forEach(movie => {
+                        const movieCard = document.createElement("div");
+                        movieCard.className = "movie-card";
+                        movieCard.innerHTML = `
+                            <h3>${movie.title}</h3>
+                            <p><strong>Genre:</strong> ${movie.genre}</p>
+                            <p><strong>Rating:</strong> ${movie.rating}</p>
+                        `;
+                        moviesDiv.appendChild(movieCard);
+                    });
+                } else {
+                    moviesDiv.innerHTML = "<p>No movies found for the selected genre.</p>";
+                }
+            } catch (error) {
+                console.error("Error fetching movies:", error);
+                alert("Failed to fetch movies. Please try again later.");
+            }
+        });
+    </script>
+</body>
+</html>
