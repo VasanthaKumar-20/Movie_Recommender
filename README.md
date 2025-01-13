@@ -49,7 +49,5 @@ A **Movie Recommendation App** built using **Django REST Framework (DRF)** for t
 |---------------------------|--------|------------------------------------------|
 | `/api/movies/`            | GET    | Retrieve a list of movies               |
 | `/api/recommendations/`   | POST   | Get movie recommendations for a user    |
-| `/api/users/`             | POST   | Register a new user                     |
-| `/api/users/login/`       | POST   | Login a user and retrieve an auth token |
 
 ---
